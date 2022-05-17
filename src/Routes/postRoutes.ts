@@ -5,6 +5,7 @@ import { Comment } from "../Entities/comment";
 import { AppDataSource } from "../Routes/data-source";
 import { Tag } from "../Entities/tag";
 import { In } from "typeorm";
+import { Likes } from "../Entities/likes";
 
 const postRouter = express.Router();
 
@@ -14,7 +15,7 @@ postRouter.get("/:postId", async function (req, res) {
 
   const post = await Post.find({
     where: { id: +postId },
-    relations: { comments: {user: true}, user: true },
+    relations: { comments: { user: true }, user: true },
   });
 
   if (!post) {
@@ -209,14 +210,42 @@ postRouter.post("/tag/:tagId", async function (req, res) {
   await newTag.save();
   return res.json(newTag);
 });
+postRouter.post("/like/:userId/:postId", async function (req, res) {
+  //adding a like
+  const { userId } = req.params;
+  const { postId } = req.params;
+  const { value } = req.body;
+
+  const user = await User.findOneBy({ id: +userId });
+  const post = await Post.findOneBy({ id: +postId });
+  const userAlreadyReacted = await Likes.findOneBy({
+    user: { id: +userId },
+    post: { id: +postId },
+  });
+  console.log(userAlreadyReacted);
+  if (!user) {
+    return res.status(404).json({ msg: "User not found" });
+  }
+  if (!post) {
+    return res.status(404).json({ msg: "Post not found" });
+  }
+
+  if (userAlreadyReacted) {
+    const updatedLike = await Likes.update(userAlreadyReacted.id, {
+      value: value,
+    });
+    // return res.status(404).json({ msg: "Already has a like" });
+    return res.status(200).json(updatedLike);
+  }
+  const newLike = Likes.create({
+    user,
+    post,
+    value,
+  });
+
+  await newLike.save();
+
+  return res.json(newLike);
+});
 
 export default postRouter;
-
-// const postRepository = AppDataSource.getRepository(Post);
-
-// const newPost = new Post();
-// newPost.title = "hii";
-// newPost.firstName = "seif";
-// newPost.lastName = "elmoo";
-// newPost.body = "first one sasf yaaawwww"
-// await postRepository.save(newPost);

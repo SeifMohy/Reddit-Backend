@@ -13,6 +13,7 @@ import {
 import { User } from "./user";
 import { Comment } from "./comment";
 import { Tag } from "./tag"
+import { Likes } from "./likes";
 
 @Entity("Posts_Table")
 export class Post extends BaseEntity {
@@ -25,9 +26,6 @@ export class Post extends BaseEntity {
   @Column()
   body: string;
 
-  @Column({nullable: true})
-  likes: [];
-
   @CreateDateColumn({nullable: true})
   date: Date;
 
@@ -36,6 +34,9 @@ export class Post extends BaseEntity {
 
   @OneToMany(() => Comment, (comments) => comments.post)
   comments: Comment[];
+
+  @OneToMany(() => Likes, (likes) => likes.post)
+  likes: Likes[];
 
   @ManyToMany(()=> Tag, tag=> tag.posts)
   tags: Tag[];

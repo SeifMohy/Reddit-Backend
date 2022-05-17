@@ -20,7 +20,7 @@ app.use(json()); //express
 app.use(urlencoded({ extended: false })); //express
 
 app.get("/", async function (req: Request, res: Response) {
-  const posts = await Post.find({relations: {user: true, tags: true, comments: true}})
+  const posts = await Post.find({relations: {user: true, tags: true, comments: true, likes: true}})
   if (!posts){
     res.json("no posts")
   }

@@ -15,7 +15,7 @@ postRouter.get("/:postId", async function (req, res) {
 
   const post = await Post.find({
     where: { id: +postId },
-    relations: { comments: { user: true }, user: true },
+    relations: { comments: { user: true }, user: true, likes: true },
   });
 
   if (!post) {
@@ -114,10 +114,9 @@ postRouter.post("/comment/:userId/:postId", async function (req, res) {
     return res.status(404).json({ msg: "Post not found" });
   }
 
-  const { title, comment } = req.body;
+  const { comment } = req.body;
 
   const newComment = Comment.create({
-    title,
     comment,
     user,
     post,

@@ -7,7 +7,7 @@ export class Comment extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column()
+    @Column({nullable: true})
     title: string
 
     @Column()

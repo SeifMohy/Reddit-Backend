@@ -2,7 +2,6 @@ import express from "express";
 import { Post } from "../Entities/post";
 import { User } from "../Entities/user";
 import { Comment } from "../Entities/comment";
-import { AppDataSource } from "../Routes/data-source";
 import { Tag } from "../Entities/tag";
 import { In } from "typeorm";
 import { Likes } from "../Entities/likes";

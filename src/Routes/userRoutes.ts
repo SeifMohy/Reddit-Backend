@@ -1,8 +1,5 @@
 import express from "express";
-import { Post } from "../Entities/post";
 import { User } from "../Entities/user";
-import { Comment } from "../Entities/comment";
-import { AppDataSource } from "../Routes/data-source";
 
 const userRouter = express.Router();
 
